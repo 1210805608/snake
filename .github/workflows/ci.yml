@@ -1,0 +1,55 @@
+```yaml
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check required files
+        run: |
+          test -f index.html
+          test -f styles.css
+          test -f game.js
+          test -f README.md
+          test -f LICENSE
+          test -f .gitignore
+
+      - name: Check HTML
+        run: |
+          grep -q "<!DOCTYPE html>" index.html
+          grep -q "<html" index.html
+          grep -q "</html>" index.html
+
+      - name: Check JavaScript
+        run: |
+          node --check game.js
+
+      - name: Check for common secret files
+        run: |
+          test ! -f .env
+          test ! -f .env.local
+          test ! -f credentials.json
+
+      - name: Validate project structure
+        run: |
+          echo "Project structure:"
+          find . -maxdepth 2 -type f \
+            ! -path "./.git/*" \
+            | sort
+```
