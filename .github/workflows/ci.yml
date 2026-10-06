@@ -1,4 +1,3 @@
-```yaml
 name: CI
 
 on:
@@ -49,7 +48,4 @@ jobs:
       - name: Validate project structure
         run: |
           echo "Project structure:"
-          find . -maxdepth 2 -type f \
-            ! -path "./.git/*" \
-            | sort
-```
+          find . -maxdepth 2 -type f ! -path "./.git/*" | sort
